@@ -1,5 +1,6 @@
+import OzelButon from '../components/OzelButon';
 import { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
 
 export default function KayitEkrani({ navigation }) {
   const [ad, setAd] = useState('');
@@ -56,7 +57,7 @@ export default function KayitEkrani({ navigation }) {
 
       {hata !== '' && <Text style={styles.hata}>{hata}</Text>}
 
-      <Button title="Kayıt Ol" onPress={kayitOl} />
+      <OzelButon title="Kayıt Ol" onPress={kayitOl} />
     </View>
   );
 }

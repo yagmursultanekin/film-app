@@ -1,13 +1,64 @@
-import { View, Text, Button } from 'react-native';
+import OzelButon from '../components/OzelButon';
+import { useState } from 'react';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
 
 export default function GirisEkrani({ navigation }) {
+  const [eposta, setEposta] = useState('');
+  const [sifre, setSifre] = useState('');
+  const [hata, setHata] = useState('');
+
+  function girisYap() {
+    if (eposta.trim() === '' || sifre.trim() === '') {
+      setHata('Lütfen e-posta ve şifreyi girin.');
+      return;
+    }
+
+    // Şimdilik AsyncStorage yok, bu yüzden kontrolü birazdan ekleyeceğiz.
+    setHata('');
+    navigation.navigate('Liste');
+  }
+
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Giriş Ekranı</Text>
-      <Button
-        title="Kayıt ol"
-        onPress={() => navigation.navigate('Kayit')}
+    <View style={styles.container}>
+      <Text style={styles.baslik}>Giriş Yap</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="E-posta"
+        value={eposta}
+        onChangeText={setEposta}
+        autoCapitalize="none"
       />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Şifre"
+        value={sifre}
+        onChangeText={setSifre}
+        secureTextEntry
+      />
+
+      {hata !== '' && <Text style={styles.hata}>{hata}</Text>}
+
+      <OzelButon title="Giriş Yap" onPress={girisYap} />
+<OzelButon
+  title="Hesabın yok mu? Kayıt ol"
+  onPress={() => navigation.navigate('Kayit')}
+  renk="#757575"
+/>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1, justifyContent: 'center', padding: 24 },
+  baslik: { fontSize: 24, fontWeight: 'bold', marginBottom: 24, textAlign: 'center' },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 12,
+  },
+  hata: { color: 'red', marginBottom: 12, textAlign: 'center' },
+});
