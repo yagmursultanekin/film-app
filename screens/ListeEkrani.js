@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import filmler from '../data/filmler';
+import { useFilmler } from '../context/FilmContext';
 
 const turler = ['Hepsi', 'Bilim Kurgu', 'Dram', 'Aksiyon'];
 const siralamaSecenekleri = [
@@ -12,6 +12,7 @@ const siralamaSecenekleri = [
 ];
 
 export default function ListeEkrani({ navigation }) {
+  const { filmler } = useFilmler();
   const [arama, setArama] = useState('');
   const [seciliTur, setSeciliTur] = useState('Hepsi');
   const [siralama, setSiralama] = useState('ad');
