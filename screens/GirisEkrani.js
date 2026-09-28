@@ -25,6 +25,7 @@ export default function GirisEkrani({ navigation }) {
       <TextInput
         style={styles.input}
         placeholder="E-posta"
+        placeholderTextColor="#fbeeee"
         value={eposta}
         onChangeText={setEposta}
         autoCapitalize="none"
@@ -33,6 +34,7 @@ export default function GirisEkrani({ navigation }) {
       <TextInput
         style={styles.input}
         placeholder="Şifre"
+        placeholderTextColor="#fbeeee"
         value={sifre}
         onChangeText={setSifre}
         secureTextEntry
@@ -51,12 +53,13 @@ export default function GirisEkrani({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 24 },
-  baslik: { fontSize: 24, fontWeight: 'bold', marginBottom: 24, textAlign: 'center' },
+  container: { flex: 1, justifyContent: 'center', padding: 24, backgroundColor: '#432e7d' },
+  baslik: { fontSize: 24, fontWeight: 'bold', marginBottom: 24, textAlign: 'center', color: '#f8f7f7' },
   input: {
-    borderWidth: 1,
+    color: '#f8f7f7',
+    borderWidth: 4,
     borderColor: '#ccc',
-    borderRadius: 8,
+    borderRadius: 20,
     padding: 12,
     marginBottom: 12,
   },
