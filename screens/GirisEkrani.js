@@ -1,6 +1,6 @@
-import OzelButon from '../components/OzelButon';
 import { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
+import OzelButon from '../components/OzelButon';
 
 export default function GirisEkrani({ navigation }) {
   const [eposta, setEposta] = useState('');
@@ -13,55 +13,69 @@ export default function GirisEkrani({ navigation }) {
       return;
     }
 
-    // Şimdilik AsyncStorage yok, bu yüzden kontrolü birazdan ekleyeceğiz.
     setHata('');
     navigation.navigate('Liste');
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.baslik}>Giriş Yap</Text>
+      <View style={styles.ustAlan}>
+        <Text style={styles.baslik}>🎬 Film Arşivim</Text>
+        <Text style={styles.altYazi}>Tekrar hoş geldin</Text>
+      </View>
 
-      <TextInput
-        style={styles.input}
-        placeholder="E-posta"
-        placeholderTextColor="#fbeeee"
-        value={eposta}
-        onChangeText={setEposta}
-        autoCapitalize="none"
-      />
+      <View style={styles.icerik}>
+        <TextInput
+          style={styles.input}
+          placeholder="E-posta"
+          placeholderTextColor="#999"
+          value={eposta}
+          onChangeText={setEposta}
+          autoCapitalize="none"
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Şifre"
-        placeholderTextColor="#fbeeee"
-        value={sifre}
-        onChangeText={setSifre}
-        secureTextEntry
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Şifre"
+          placeholderTextColor="#999"
+          value={sifre}
+          onChangeText={setSifre}
+          secureTextEntry
+        />
 
-      {hata !== '' && <Text style={styles.hata}>{hata}</Text>}
+        {hata !== '' && <Text style={styles.hata}>{hata}</Text>}
 
-      <OzelButon title="Giriş Yap" onPress={girisYap} />
-<OzelButon
-  title="Hesabın yok mu? Kayıt ol"
-  onPress={() => navigation.navigate('Kayit')}
-  renk="#757575"
-/>
+        <OzelButon title="Giriş Yap" onPress={girisYap} />
+        <OzelButon
+          title="Hesabın yok mu? Kayıt ol"
+          onPress={() => navigation.navigate('Kayit')}
+          renk="#757575"
+        />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 24, backgroundColor: '#432e7d' },
-  baslik: { fontSize: 24, fontWeight: 'bold', marginBottom: 24, textAlign: 'center', color: '#f8f7f7' },
-  input: {
-    color: '#f8f7f7',
-    borderWidth: 4,
-    borderColor: '#ccc',
-    borderRadius: 20,
-    padding: 12,
-    marginBottom: 12,
+  container: { flex: 1, backgroundColor: '#702e7d' },
+  ustAlan: { paddingTop: 70, paddingHorizontal: 20, paddingBottom: 30 },
+  baslik: { fontSize: 28, fontWeight: 'bold', color: '#fff' },
+  altYazi: { color: '#c8e6c9', marginTop: 6, fontSize: 14 },
+  icerik: {
+    flex: 1,
+    backgroundColor: '#fafafa',
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    padding: 24,
   },
-  hata: { color: 'red', marginBottom: 12, textAlign: 'center' },
+  input: {
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    borderRadius: 12,
+    padding: 14,
+    marginBottom: 14,
+    backgroundColor: '#fff',
+    fontSize: 15,
+  },
+  hata: { color: '#c62828', marginBottom: 14, textAlign: 'center', fontSize: 13 },
 });

@@ -1,6 +1,6 @@
-import OzelButon from '../components/OzelButon';
 import { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
+import OzelButon from '../components/OzelButon';
 
 export default function KayitEkrani({ navigation }) {
   const [ad, setAd] = useState('');
@@ -30,47 +30,66 @@ export default function KayitEkrani({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.baslik}>Kayıt Ol</Text>
+      <View style={styles.ustAlan}>
+        <Text style={styles.baslik}>🎬 Film Arşivim</Text>
+        <Text style={styles.altYazi}>Yeni hesap oluştur</Text>
+      </View>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Ad Soyad"
-        value={ad}
-        onChangeText={setAd}
-      />
+      <View style={styles.icerik}>
+        <TextInput
+          style={styles.input}
+          placeholder="Ad Soyad"
+          placeholderTextColor="#999"
+          value={ad}
+          onChangeText={setAd}
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="E-posta"
-        value={eposta}
-        onChangeText={setEposta}
-        autoCapitalize="none"
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="E-posta"
+          placeholderTextColor="#999"
+          value={eposta}
+          onChangeText={setEposta}
+          autoCapitalize="none"
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Şifre"
-        value={sifre}
-        onChangeText={setSifre}
-        secureTextEntry
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Şifre"
+          placeholderTextColor="#999"
+          value={sifre}
+          onChangeText={setSifre}
+          secureTextEntry
+        />
 
-      {hata !== '' && <Text style={styles.hata}>{hata}</Text>}
+        {hata !== '' && <Text style={styles.hata}>{hata}</Text>}
 
-      <OzelButon title="Kayıt Ol" onPress={kayitOl} />
+        <OzelButon title="Kayıt Ol" onPress={kayitOl} />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 24 },
-  baslik: { fontSize: 24, fontWeight: 'bold', marginBottom: 24, textAlign: 'center' },
+  container: { flex: 1, backgroundColor: '#702e7d' },
+  ustAlan: { paddingTop: 70, paddingHorizontal: 20, paddingBottom: 30 },
+  baslik: { fontSize: 28, fontWeight: 'bold', color: '#fff' },
+  altYazi: { color: '#c8e6c9', marginTop: 6, fontSize: 14 },
+  icerik: {
+    flex: 1,
+    backgroundColor: '#fafafa',
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    padding: 24,
+  },
   input: {
     borderWidth: 1,
-    borderColor: '#0f3460',
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 12,
+    borderColor: '#e0e0e0',
+    borderRadius: 12,
+    padding: 14,
+    marginBottom: 14,
+    backgroundColor: '#fff',
+    fontSize: 15,
   },
-  hata: { color: 'red', marginBottom: 12, textAlign: 'center' },
+  hata: { color: '#c62828', marginBottom: 14, textAlign: 'center', fontSize: 13 },
 });
