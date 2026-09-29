@@ -3,10 +3,12 @@ import { View, Text, TextInput, FlatList, TouchableOpacity, Image, ActivityIndic
 import { Picker } from '@react-native-picker/picker';
 import { useFilmler } from '../context/FilmContext';
 
+const turler = ['Hepsi', 'Aksiyon', 'Macera', 'Animasyon', 'Komedi', 'Suç', 'Belgesel', 'Dram', 'Aile', 'Fantastik', 'Tarih', 'Korku', 'Müzik', 'Gizem', 'Romantik', 'Bilim Kurgu', 'Gerilim', 'Savaş'];
 const siralamaSecenekleri = [
   { label: 'İsme göre', value: 'ad' },
   { label: 'Puana göre', value: 'puan' },
   { label: 'Yıla göre', value: 'yil' },
+  { label: 'Türe göre', value: 'tur' },
 ];
 
 export default function ListeEkrani({ navigation }) {
@@ -14,25 +16,32 @@ export default function ListeEkrani({ navigation }) {
 
   const [arama, setArama] = useState('');
   const [siralama, setSiralama] = useState('ad');
+  const [seciliTur, setSeciliTur] = useState('Hepsi');
 
-  const gosterilecekFilmler = useMemo(() => {
-    let sonuc = filmler;
+  
+const gosterilecekFilmler = useMemo(() => {
+  let sonuc = filmler;
 
-    if (arama.trim() !== '') {
-      sonuc = sonuc.filter((film) =>
-        film.ad.toLowerCase().includes(arama.toLowerCase())
-      );
-    }
+  if (siralama === 'tur' && seciliTur !== 'Hepsi') {
+    sonuc = sonuc.filter((film) => film.tur === seciliTur);
+  }
 
-    sonuc = [...sonuc].sort((a, b) => {
-      if (siralama === 'ad') return a.ad.localeCompare(b.ad);
-      if (siralama === 'puan') return b.puan - a.puan;
-      if (siralama === 'yil') return b.yil - a.yil;
-      return 0;
-    });
+  if (arama.trim() !== '') {
+    sonuc = sonuc.filter((film) =>
+      film.ad.toLowerCase().includes(arama.toLowerCase())
+    );
+  }
 
-    return sonuc;
-  }, [arama, siralama, filmler]);
+  sonuc = [...sonuc].sort((a, b) => {
+    if (siralama === 'ad') return a.ad.localeCompare(b.ad);
+    if (siralama === 'puan') return b.puan - a.puan;
+    if (siralama === 'yil') return b.yil - a.yil;
+    if (siralama === 'tur') return a.ad.localeCompare(b.ad);
+    return 0;
+  });
+
+  return sonuc;
+}, [arama, siralama, seciliTur, filmler]);
 
   if (yukleniyor) {
     return (
@@ -76,6 +85,16 @@ export default function ListeEkrani({ navigation }) {
             ))}
           </Picker>
         </View>
+
+        {siralama === 'tur' && (
+  <View style={styles.dropdownKutusu}>
+    <Picker selectedValue={seciliTur} onValueChange={setSeciliTur}>
+      {turler.map((tur) => (
+        <Picker.Item key={tur} label={tur} value={tur} />
+      ))}
+    </Picker>
+  </View>
+)}
 
         <FlatList
           data={gosterilecekFilmler}

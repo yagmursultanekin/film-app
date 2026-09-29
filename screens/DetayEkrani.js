@@ -1,25 +1,36 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet } from 'react-native';
 
 export default function DetayEkrani({ route }) {
   const { film } = route.params;
 
+  const turMetni = film.turler && film.turler.length > 0
+    ? film.turler.join(', ')
+    : film.tur;
+
   return (
     <View style={styles.container}>
       <View style={styles.ustAlan}>
-        <View style={styles.posterYerTutucu}>
-          <Text style={styles.posterYazi}>{film.ad.charAt(0)}</Text>
-        </View>
+        {film.posterYolu ? (
+          <Image
+            source={{ uri: `https://image.tmdb.org/t/p/w300${film.posterYolu}` }}
+            style={styles.poster}
+          />
+        ) : (
+          <View style={styles.posterYerTutucu}>
+            <Text style={styles.posterYazi}>{film.ad.charAt(0)}</Text>
+          </View>
+        )}
         <Text style={styles.ad}>{film.ad}</Text>
-        <Text style={styles.altBilgi}>{film.yil} · {film.tur}</Text>
+        <Text style={styles.altBilgi}>{film.yil} · {turMetni}</Text>
       </View>
 
       <View style={styles.icerik}>
         <View style={styles.puanKutusu}>
-          <Text style={styles.puanYazi}>⭐ {film.puan}</Text>
+          <Text style={styles.puanYazi}>⭐ {film.puan.toFixed(1)}</Text>
         </View>
 
         <Text style={styles.aciklamaBaslik}>AÇIKLAMA</Text>
-        <Text style={styles.aciklama}>{film.aciklama}</Text>
+        <Text style={styles.aciklama}>{film.aciklama || 'Açıklama bulunamadı.'}</Text>
       </View>
     </View>
   );
@@ -28,18 +39,19 @@ export default function DetayEkrani({ route }) {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#702e7d' },
   ustAlan: { paddingTop: 50, paddingHorizontal: 24, paddingBottom: 30, alignItems: 'center' },
+  poster: { width: 120, height: 180, borderRadius: 12, marginBottom: 14 },
   posterYerTutucu: {
-    width: 72,
-    height: 72,
-    borderRadius: 16,
+    width: 120,
+    height: 180,
+    borderRadius: 12,
     backgroundColor: 'rgba(255,255,255,0.15)',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 14,
   },
-  posterYazi: { color: '#fff', fontSize: 30, fontWeight: 'bold' },
-  ad: { fontSize: 24, fontWeight: 'bold', color: '#fff', textAlign: 'center' },
-  altBilgi: { color: '#e1bee7', marginTop: 6, fontSize: 14 },
+  posterYazi: { color: '#fff', fontSize: 40, fontWeight: 'bold' },
+  ad: { fontSize: 22, fontWeight: 'bold', color: '#fff', textAlign: 'center' },
+  altBilgi: { color: '#e1bee7', marginTop: 6, fontSize: 14, textAlign: 'center' },
   icerik: {
     flex: 1,
     backgroundColor: '#fafafa',

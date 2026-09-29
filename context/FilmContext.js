@@ -1,4 +1,5 @@
 import { createContext, useState, useContext, useEffect } from 'react';
+import turHaritasi from '../data/turler';
 
 const FilmContext = createContext();
 
@@ -20,7 +21,12 @@ export function FilmProvider({ children }) {
           id: film.id.toString(),
           ad: film.title,
           yil: film.release_date ? Number(film.release_date.slice(0, 4)) : 0,
-          tur: 'Bilinmiyor',
+          tur: film.genre_ids && film.genre_ids.length > 0
+  ? turHaritasi[film.genre_ids[0]] || 'Bilinmiyor'
+  : 'Bilinmiyor',
+turler: film.genre_ids
+  ? film.genre_ids.map((id) => turHaritasi[id]).filter(Boolean)
+  : [],
           puan: film.vote_average,
           aciklama: film.overview,
           posterYolu: film.poster_path,
