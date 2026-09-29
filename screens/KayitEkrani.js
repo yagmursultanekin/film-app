@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import OzelButon from '../components/OzelButon';
+import DilSecici from '../components/DilSecici';
 
 export default function KayitEkrani({ navigation }) {
   const { kayitOl } = useAuth();
+  const { t } = useLanguage();
 
   const [ad, setAd] = useState('');
   const [eposta, setEposta] = useState('');
@@ -13,17 +16,17 @@ export default function KayitEkrani({ navigation }) {
 
   async function kayitYap() {
     if (ad.trim() === '' || eposta.trim() === '' || sifre.trim() === '') {
-      setHata('Lütfen tüm alanları doldurun.');
+      setHata(t.tumAlanlariDoldurun);
       return;
     }
 
     if (!eposta.includes('@')) {
-      setHata('Geçerli bir e-posta girin.');
+      setHata(t.gecerliEposta);
       return;
     }
 
     if (sifre.length < 6) {
-      setHata('Şifre en az 6 karakter olmalı.');
+      setHata(t.sifreEnAz6);
       return;
     }
 
@@ -41,14 +44,15 @@ export default function KayitEkrani({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.ustAlan}>
-        <Text style={styles.baslik}>🎬 Film Arşivim</Text>
-        <Text style={styles.altYazi}>Yeni hesap oluştur</Text>
+        <DilSecici />
+        <Text style={styles.baslik}>🎬 {t.filmArsivim}</Text>
+        <Text style={styles.altYazi}>{t.yeniHesapOlustur}</Text>
       </View>
 
       <View style={styles.icerik}>
         <TextInput
           style={styles.input}
-          placeholder="Ad Soyad"
+          placeholder={t.adSoyad}
           placeholderTextColor="#999"
           value={ad}
           onChangeText={setAd}
@@ -56,7 +60,7 @@ export default function KayitEkrani({ navigation }) {
 
         <TextInput
           style={styles.input}
-          placeholder="E-posta"
+          placeholder={t.eposta}
           placeholderTextColor="#999"
           value={eposta}
           onChangeText={setEposta}
@@ -65,7 +69,7 @@ export default function KayitEkrani({ navigation }) {
 
         <TextInput
           style={styles.input}
-          placeholder="Şifre"
+          placeholder={t.sifre}
           placeholderTextColor="#999"
           value={sifre}
           onChangeText={setSifre}
@@ -74,7 +78,7 @@ export default function KayitEkrani({ navigation }) {
 
         {hata !== '' && <Text style={styles.hata}>{hata}</Text>}
 
-        <OzelButon title="Kayıt Ol" onPress={kayitYap} />
+        <OzelButon title={t.kayitOl} onPress={kayitYap} />
       </View>
     </View>
   );

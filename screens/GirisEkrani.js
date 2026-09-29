@@ -1,10 +1,13 @@
 import { useState } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
+import DilSecici from '../components/DilSecici';
 import OzelButon from '../components/OzelButon';
 
 export default function GirisEkrani({ navigation }) {
   const { girisYap } = useAuth();
+ const { t } = useLanguage();
 
   const [eposta, setEposta] = useState('');
   const [sifre, setSifre] = useState('');
@@ -12,7 +15,7 @@ export default function GirisEkrani({ navigation }) {
 
   async function girisIslemi() {
     if (eposta.trim() === '' || sifre.trim() === '') {
-      setHata('Lütfen e-posta ve şifreyi girin.');
+      setHata(t.epostaSifreGirin);
       return;
     }
 
@@ -25,22 +28,24 @@ export default function GirisEkrani({ navigation }) {
 
     setHata('');
     navigation.reset({
-  index: 0,
-  routes: [{ name: 'Liste' }],
-});
+      index: 0,
+      routes: [{ name: 'Liste' }],
+    });
   }
 
   return (
     <View style={styles.container}>
       <View style={styles.ustAlan}>
-        <Text style={styles.baslik}>🎬 Film Arşivim</Text>
-        <Text style={styles.altYazi}>Tekrar hoş geldin</Text>
+        <DilSecici />
+
+        <Text style={styles.baslik}>🎬 {t.filmArsivim}</Text>
+        <Text style={styles.altYazi}>{t.tekrarHosGeldin}</Text>
       </View>
 
       <View style={styles.icerik}>
         <TextInput
           style={styles.input}
-          placeholder="E-posta"
+          placeholder={t.eposta}
           placeholderTextColor="#999"
           value={eposta}
           onChangeText={setEposta}
@@ -49,7 +54,7 @@ export default function GirisEkrani({ navigation }) {
 
         <TextInput
           style={styles.input}
-          placeholder="Şifre"
+          placeholder={t.sifre}
           placeholderTextColor="#999"
           value={sifre}
           onChangeText={setSifre}
@@ -58,9 +63,9 @@ export default function GirisEkrani({ navigation }) {
 
         {hata !== '' && <Text style={styles.hata}>{hata}</Text>}
 
-        <OzelButon title="Giriş Yap" onPress={girisIslemi} />
+        <OzelButon title={t.girisYap} onPress={girisIslemi} />
         <OzelButon
-          title="Hesabın yok mu? Kayıt ol"
+          title={t.hesabinYokMu}
           onPress={() => navigation.navigate('Kayit')}
           renk="#757575"
         />

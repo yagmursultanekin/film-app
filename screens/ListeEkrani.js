@@ -2,54 +2,59 @@ import { useState, useMemo } from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity, Image, ActivityIndicator, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useFilmler } from '../context/FilmContext';
-import  OzelButon from '../components/OzelButon';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
+import OzelButon from '../components/OzelButon';
+import DilSecici from '../components/DilSecici';
 
-const turler = ['Hepsi', 'Aksiyon', 'Macera', 'Animasyon', 'Komedi', 'Suç', 'Belgesel', 'Dram', 'Aile', 'Fantastik', 'Tarih', 'Korku', 'Müzik', 'Gizem', 'Romantik', 'Bilim Kurgu', 'Gerilim', 'Savaş'];
-const siralamaSecenekleri = [
-  { label: 'İsme göre', value: 'ad' },
-  { label: 'Puana göre', value: 'puan' },
-  { label: 'Yıla göre', value: 'yil' },
-  { label: 'Türe göre', value: 'tur' },
-];
+const turListesi = ['Aksiyon', 'Macera', 'Animasyon', 'Komedi', 'Suç', 'Belgesel', 'Dram', 'Aile', 'Fantastik', 'Tarih', 'Korku', 'Müzik', 'Gizem', 'Romantik', 'Bilim Kurgu', 'Gerilim', 'Savaş'];
 
 export default function ListeEkrani({ navigation }) {
   const { filmler, yukleniyor, hata, favoriDegistir, favoriMi } = useFilmler();
   const { cikisYap } = useAuth();
+  const { t } = useLanguage();
+
   const [arama, setArama] = useState('');
-  const [siralama, setSiralama] = useState('ad');
   const [seciliTur, setSeciliTur] = useState('Hepsi');
+  const [siralama, setSiralama] = useState('ad');
 
-  
-const gosterilecekFilmler = useMemo(() => {
-  let sonuc = filmler;
+  const turler = ['Hepsi', ...turListesi];
+  const siralamaSecenekleri = [
+    { label: t.ismeGore, value: 'ad' },
+    { label: t.puanaGore, value: 'puan' },
+    { label: t.yilaGore, value: 'yil' },
+    { label: t.tureGore, value: 'tur' },
+  ];
 
-  if (siralama === 'tur' && seciliTur !== 'Hepsi') {
-    sonuc = sonuc.filter((film) => film.tur === seciliTur);
-  }
+  const gosterilecekFilmler = useMemo(() => {
+    let sonuc = filmler;
 
-  if (arama.trim() !== '') {
-    sonuc = sonuc.filter((film) =>
-      film.ad.toLowerCase().includes(arama.toLowerCase())
-    );
-  }
+    if (siralama === 'tur' && seciliTur !== 'Hepsi') {
+      sonuc = sonuc.filter((film) => film.tur === seciliTur);
+    }
 
-  sonuc = [...sonuc].sort((a, b) => {
-    if (siralama === 'ad') return a.ad.localeCompare(b.ad);
-    if (siralama === 'puan') return b.puan - a.puan;
-    if (siralama === 'yil') return b.yil - a.yil;
-    if (siralama === 'tur') return a.ad.localeCompare(b.ad);
-    return 0;
-  });
+    if (arama.trim() !== '') {
+      sonuc = sonuc.filter((film) =>
+        film.ad.toLowerCase().includes(arama.toLowerCase())
+      );
+    }
 
-  return sonuc;
-}, [arama, siralama, seciliTur, filmler]);
+    sonuc = [...sonuc].sort((a, b) => {
+      if (siralama === 'ad') return a.ad.localeCompare(b.ad);
+      if (siralama === 'puan') return b.puan - a.puan;
+      if (siralama === 'yil') return b.yil - a.yil;
+      if (siralama === 'tur') return a.ad.localeCompare(b.ad);
+      return 0;
+    });
+
+    return sonuc;
+  }, [arama, siralama, seciliTur, filmler]);
 
   if (yukleniyor) {
     return (
       <View style={styles.ortalanmisAlan}>
         <ActivityIndicator size="large" color="#702e7d" />
-        <Text style={{ marginTop: 12, color: 'gray' }}>Filmler yükleniyor...</Text>
+        <Text style={{ marginTop: 12, color: 'gray' }}>{t.filmlerYukleniyor}</Text>
       </View>
     );
   }
@@ -65,37 +70,39 @@ const gosterilecekFilmler = useMemo(() => {
   return (
     <View style={styles.container}>
       <View style={styles.ustAlan}>
-        <Text style={styles.baslik}>🎬 Film Arşivim</Text>
-        <Text style={styles.altYazi}>{gosterilecekFilmler.length} film listeleniyor</Text>
+        <DilSecici />
+        <Text style={styles.baslik}>🎬 {t.filmArsivim}</Text>
+        <Text style={styles.altYazi}>{gosterilecekFilmler.length} {t.filmListeleniyor}</Text>
       </View>
 
       <View style={styles.icerik}>
         <OzelButon
-  title="❤️ Favorilerim"
-  onPress={() => navigation.navigate('Favoriler')}
-  renk="#702e7d"
-/>
-<OzelButon
-  title="Çıkış Yap"
-  onPress={async () => {
-    await cikisYap();
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Giris' }],
-    });
-  }}
-  renk="#757575"
-/>
+          title={`❤️ ${t.favorilerim}`}
+          onPress={() => navigation.navigate('Favoriler')}
+          renk="#702e7d"
+        />
+
+        <OzelButon
+          title={t.cikisYap}
+          onPress={async () => {
+            await cikisYap();
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'Giris' }],
+            });
+          }}
+          renk="#757575"
+        />
 
         <TextInput
           style={styles.aramaKutusu}
-          placeholder="🔍  Film ara..."
+          placeholder={`🔍  ${t.filmAra}`}
           placeholderTextColor="#999"
           value={arama}
           onChangeText={setArama}
         />
 
-        <Text style={styles.filtreBaslik}>FİLTRELEME SEÇENEKLERİ</Text>
+        <Text style={styles.filtreBaslik}>{t.filtrelemeSecenekleri}</Text>
 
         <View style={styles.dropdownKutusu}>
           <Picker selectedValue={siralama} onValueChange={setSiralama}>
@@ -106,55 +113,55 @@ const gosterilecekFilmler = useMemo(() => {
         </View>
 
         {siralama === 'tur' && (
-  <View style={styles.dropdownKutusu}>
-    <Picker selectedValue={seciliTur} onValueChange={setSeciliTur}>
-      {turler.map((tur) => (
-        <Picker.Item key={tur} label={tur} value={tur} />
-      ))}
-    </Picker>
-  </View>
-)}
+          <View style={styles.dropdownKutusu}>
+            <Picker selectedValue={seciliTur} onValueChange={setSeciliTur}>
+              {turler.map((tur) => (
+                <Picker.Item key={tur} label={tur === 'Hepsi' ? t.hepsi : tur} value={tur} />
+              ))}
+            </Picker>
+          </View>
+        )}
 
         <FlatList
           data={gosterilecekFilmler}
           keyExtractor={(item) => item.id}
           contentContainerStyle={{ paddingBottom: 24, paddingTop: 4 }}
           ListEmptyComponent={
-            <Text style={styles.bosYazi}>Aradığın kriterlere uyan film bulunamadı.</Text>
+            <Text style={styles.bosYazi}>{t.sonucBulunamadi}</Text>
           }
-         renderItem={({ item }) => (
-  <TouchableOpacity
-    style={styles.kart}
-    activeOpacity={0.7}
-    onPress={() => navigation.navigate('Detay', { film: item })}
-  >
-    {item.posterYolu ? (
-      <Image
-        source={{ uri: `https://image.tmdb.org/t/p/w200${item.posterYolu}` }}
-        style={styles.poster}
-      />
-    ) : (
-      <View style={styles.posterYerTutucu}>
-        <Text style={styles.posterYazi}>{item.ad.charAt(0)}</Text>
-      </View>
-    )}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={styles.kart}
+              activeOpacity={0.7}
+              onPress={() => navigation.navigate('Detay', { film: item })}
+            >
+              {item.posterYolu ? (
+                <Image
+                  source={{ uri: `https://image.tmdb.org/t/p/w200${item.posterYolu}` }}
+                  style={styles.poster}
+                />
+              ) : (
+                <View style={styles.posterYerTutucu}>
+                  <Text style={styles.posterYazi}>{item.ad.charAt(0)}</Text>
+                </View>
+              )}
 
-    <View style={{ flex: 1 }}>
-      <Text style={styles.ad}>{item.ad}</Text>
-      <Text style={styles.altBilgi}>{item.yil}</Text>
-      <View style={styles.puanKutusu}>
-        <Text style={styles.puanYazi}>⭐ {item.puan.toFixed(1)}</Text>
-      </View>
-    </View>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.ad}>{item.ad}</Text>
+                <Text style={styles.altBilgi}>{item.yil}</Text>
+                <View style={styles.puanKutusu}>
+                  <Text style={styles.puanYazi}>⭐ {item.puan.toFixed(1)}</Text>
+                </View>
+              </View>
 
-    <TouchableOpacity
-      style={styles.kalpButon}
-      onPress={() => favoriDegistir(item.id)}
-    >
-      <Text style={styles.kalpYazi}>{favoriMi(item.id) ? '❤️' : '🤍'}</Text>
-    </TouchableOpacity>
-  </TouchableOpacity>
-)}
+              <TouchableOpacity
+                style={styles.kalpButon}
+                onPress={() => favoriDegistir(item.id)}
+              >
+                <Text style={styles.kalpYazi}>{favoriMi(item.id) ? '❤️' : '🤍'}</Text>
+              </TouchableOpacity>
+            </TouchableOpacity>
+          )}
         />
       </View>
     </View>
@@ -212,12 +219,7 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 3,
   },
-  poster: {
-    width: 48,
-    height: 72,
-    borderRadius: 8,
-    marginRight: 14,
-  },
+  poster: { width: 48, height: 72, borderRadius: 8, marginRight: 14 },
   posterYerTutucu: {
     width: 48,
     height: 72,
@@ -235,13 +237,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 8,
+    alignSelf: 'flex-start',
+    marginTop: 4,
   },
   puanYazi: { fontWeight: 'bold', color: '#8a6d00', fontSize: 13 },
-
-  kalpButon: {
-  padding: 8,
-},
-kalpYazi: {
-  fontSize: 22,
-},
+  kalpButon: { padding: 8 },
+  kalpYazi: { fontSize: 22 },
 });

@@ -1,9 +1,12 @@
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useFilmler } from '../context/FilmContext';
+import { useLanguage } from '../context/LanguageContext';
+import DilSecici from '../components/DilSecici';
 
 export default function DetayEkrani({ route, navigation }) {
   const { film } = route.params;
   const { favoriDegistir, favoriMi } = useFilmler();
+  const { t } = useLanguage();
 
   const turMetni = film.turler && film.turler.length > 0
     ? film.turler.join(', ')
@@ -13,10 +16,10 @@ export default function DetayEkrani({ route, navigation }) {
     <View style={styles.container}>
       <View style={styles.ustAlan}>
         <TouchableOpacity style={styles.geriButon} onPress={() => navigation.goBack()}>
-          <Text style={styles.geriYazi}>← Geri</Text>
-
+          <Text style={styles.geriYazi}>{t.geri}</Text>
         </TouchableOpacity>
-        
+        <DilSecici />
+
         {film.posterYolu ? (
           <Image
             source={{ uri: `https://image.tmdb.org/t/p/w300${film.posterYolu}` }}
@@ -35,7 +38,7 @@ export default function DetayEkrani({ route, navigation }) {
           onPress={() => favoriDegistir(film.id)}
         >
           <Text style={styles.favoriYazi}>
-            {favoriMi(film.id) ? '❤️ Favorilerden Çıkar' : '🤍 Favorilere Ekle'}
+            {favoriMi(film.id) ? t.favorilerdenCikar : t.favorilereEkle}
           </Text>
         </TouchableOpacity>
       </View>
@@ -45,8 +48,8 @@ export default function DetayEkrani({ route, navigation }) {
           <Text style={styles.puanYazi}>⭐ {film.puan.toFixed(1)}</Text>
         </View>
 
-        <Text style={styles.aciklamaBaslik}>AÇIKLAMA</Text>
-        <Text style={styles.aciklama}>{film.aciklama || 'Açıklama bulunamadı.'}</Text>
+        <Text style={styles.aciklamaBaslik}>{t.aciklama}</Text>
+        <Text style={styles.aciklama}>{film.aciklama || t.aciklamaBulunamadi}</Text>
       </View>
     </View>
   );
@@ -55,6 +58,8 @@ export default function DetayEkrani({ route, navigation }) {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#702e7d' },
   ustAlan: { paddingTop: 50, paddingHorizontal: 24, paddingBottom: 30, alignItems: 'center' },
+  geriButon: { alignSelf: 'flex-start', marginBottom: 16 },
+  geriYazi: { color: '#fff', fontSize: 15, fontWeight: 'bold' },
   poster: { width: 120, height: 180, borderRadius: 12, marginBottom: 14 },
   posterYerTutucu: {
     width: 120,
@@ -94,19 +99,4 @@ const styles = StyleSheet.create({
   puanYazi: { fontWeight: 'bold', color: '#8a6d00', fontSize: 15 },
   aciklamaBaslik: { fontSize: 12, fontWeight: 'bold', color: '#999', marginBottom: 8, letterSpacing: 0.5 },
   aciklama: { fontSize: 15, lineHeight: 23, color: '#333' },
-  geriButon: {
-  alignSelf: 'flex-start',
-  marginBottom: 16,
-  backgroundColor: '#7cafbe',
-  borderRadius: 8,
-  width: 62,             // Butonun toplam genişliği
-  height: 25,             // Butonun toplam yüksekliği
-  justifyContent: 'center', // İçindeki yazıyı dikeyde ortalar
-  alignItems: 'center',
-},
-geriYazi: {
-  color: '#fff',
-  fontSize: 15,
-  fontWeight: 'bold',
-},
 });

@@ -1,8 +1,11 @@
 import { View, Text, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { useFilmler } from '../context/FilmContext';
+import { useLanguage } from '../context/LanguageContext';
+import DilSecici from '../components/DilSecici';
 
 export default function FavorilerEkrani({ navigation }) {
   const { filmler, favoriler, favoriDegistir } = useFilmler();
+  const { t } = useLanguage();
 
   const favoriFilmler = filmler.filter((film) => favoriler.includes(film.id));
 
@@ -10,10 +13,12 @@ export default function FavorilerEkrani({ navigation }) {
     <View style={styles.container}>
       <View style={styles.ustAlan}>
         <TouchableOpacity style={styles.geriButon} onPress={() => navigation.goBack()}>
-    <Text style={styles.geriYazi}>← Geri</Text>
-  </TouchableOpacity>
-        <Text style={styles.baslik}>❤️ Favorilerim</Text>
-        <Text style={styles.altYazi}>{favoriFilmler.length} film</Text>
+          <Text style={styles.geriYazi}>{t.geri}</Text>
+        </TouchableOpacity>
+        <DilSecici />
+
+        <Text style={styles.baslik}>❤️ {t.favorilerim}</Text>
+        <Text style={styles.altYazi}>{favoriFilmler.length} {t.filmSayisi}</Text>
       </View>
 
       <View style={styles.icerik}>
@@ -22,7 +27,7 @@ export default function FavorilerEkrani({ navigation }) {
           keyExtractor={(item) => item.id}
           contentContainerStyle={{ paddingBottom: 24, paddingTop: 4 }}
           ListEmptyComponent={
-            <Text style={styles.bosYazi}>Henüz favori filmin yok.{'\n'}Bir filmin kalbine dokunarak ekleyebilirsin.</Text>
+            <Text style={styles.bosYazi}>{t.henuzFavoriYok}</Text>
           }
           renderItem={({ item }) => (
             <TouchableOpacity
@@ -63,6 +68,8 @@ export default function FavorilerEkrani({ navigation }) {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#702e7d' },
   ustAlan: { paddingTop: 50, paddingHorizontal: 20, paddingBottom: 20 },
+  geriButon: { alignSelf: 'flex-start', marginBottom: 12 },
+  geriYazi: { color: '#fff', fontSize: 15, fontWeight: 'bold' },
   baslik: { fontSize: 26, fontWeight: 'bold', color: '#fff' },
   altYazi: { color: '#e1bee7', marginTop: 4, fontSize: 13 },
   icerik: {
@@ -101,20 +108,4 @@ const styles = StyleSheet.create({
   altBilgi: { color: 'gray', marginTop: 4, fontSize: 13 },
   kalpButon: { padding: 8 },
   kalpYazi: { fontSize: 22 },
-
-    geriButon: {
-  alignSelf: 'flex-start',
-  marginBottom: 16,
-  backgroundColor: '#7cafbe',
-  borderRadius: 8,
-  width: 62,             // Butonun toplam genişliği
-  height: 25,             // Butonun toplam yüksekliği
-  justifyContent: 'center', // İçindeki yazıyı dikeyde ortalar
-  alignItems: 'center',
-},
-geriYazi: {
-  color: '#fff',
-  fontSize: 15,
-  fontWeight: 'bold',
-},
 });
