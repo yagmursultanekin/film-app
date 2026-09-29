@@ -3,6 +3,7 @@ import { View, Text, TextInput, FlatList, TouchableOpacity, Image, ActivityIndic
 import { Picker } from '@react-native-picker/picker';
 import { useFilmler } from '../context/FilmContext';
 import  OzelButon from '../components/OzelButon';
+import { useAuth } from '../context/AuthContext';
 
 const turler = ['Hepsi', 'Aksiyon', 'Macera', 'Animasyon', 'Komedi', 'Suç', 'Belgesel', 'Dram', 'Aile', 'Fantastik', 'Tarih', 'Korku', 'Müzik', 'Gizem', 'Romantik', 'Bilim Kurgu', 'Gerilim', 'Savaş'];
 const siralamaSecenekleri = [
@@ -14,6 +15,7 @@ const siralamaSecenekleri = [
 
 export default function ListeEkrani({ navigation }) {
   const { filmler, yukleniyor, hata, favoriDegistir, favoriMi } = useFilmler();
+  const { cikisYap } = useAuth();
   const [arama, setArama] = useState('');
   const [siralama, setSiralama] = useState('ad');
   const [seciliTur, setSeciliTur] = useState('Hepsi');
@@ -72,6 +74,17 @@ const gosterilecekFilmler = useMemo(() => {
   title="❤️ Favorilerim"
   onPress={() => navigation.navigate('Favoriler')}
   renk="#702e7d"
+/>
+<OzelButon
+  title="Çıkış Yap"
+  onPress={async () => {
+    await cikisYap();
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Giris' }],
+    });
+  }}
+  renk="#757575"
 />
 
         <TextInput

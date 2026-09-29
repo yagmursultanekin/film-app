@@ -1,20 +1,22 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import turHaritasi from '../data/turler';
+import { useAuth } from './AuthContext';
 
 const FilmContext = createContext();
 
 const API_ANAHTARI = process.env.EXPO_PUBLIC_TMDB_API_KEY;
-const FAVORI_ANAHTARI = 'favoriFilmler';
 
 export function FilmProvider({ children }) {
+  const { aktifKullanici } = useAuth();
+
   const [filmler, setFilmler] = useState([]);
   const [favoriler, setFavoriler] = useState([]);
   const [yukleniyor, setYukleniyor] = useState(true);
   const [hata, setHata] = useState('');
 
   useEffect(() => {
-    async function baslangicVerisi() {
+    async function filmleriGetir() {
       try {
         const url = `https://api.themoviedb.org/3/movie/popular?api_key=${API_ANAHTARI}&language=tr-TR&page=1`;
         const cevap = await fetch(url);
@@ -36,11 +38,6 @@ export function FilmProvider({ children }) {
         }));
 
         setFilmler(donusturulmusListe);
-
-        const kayitliFavoriler = await AsyncStorage.getItem(FAVORI_ANAHTARI);
-        if (kayitliFavoriler) {
-          setFavoriler(JSON.parse(kayitliFavoriler));
-        }
       } catch (e) {
         setHata('Filmler yüklenirken bir hata oluştu.');
       } finally {
@@ -48,16 +45,35 @@ export function FilmProvider({ children }) {
       }
     }
 
-    baslangicVerisi();
+    filmleriGetir();
   }, []);
 
+  useEffect(() => {
+    async function favorileriGetir() {
+      if (!aktifKullanici) {
+        setFavoriler([]);
+        return;
+      }
+
+      const anahtar = `favoriler_${aktifKullanici}`;
+      const kayitliFavoriler = await AsyncStorage.getItem(anahtar);
+      setFavoriler(kayitliFavoriler ? JSON.parse(kayitliFavoriler) : []);
+    }
+
+    favorileriGetir();
+  }, [aktifKullanici]);
+
   async function favoriDegistir(filmId) {
+    if (!aktifKullanici) return;
+
     const yeniFavoriler = favoriler.includes(filmId)
       ? favoriler.filter((id) => id !== filmId)
       : [...favoriler, filmId];
 
     setFavoriler(yeniFavoriler);
-    await AsyncStorage.setItem(FAVORI_ANAHTARI, JSON.stringify(yeniFavoriler));
+
+    const anahtar = `favoriler_${aktifKullanici}`;
+    await AsyncStorage.setItem(anahtar, JSON.stringify(yeniFavoriler));
   }
 
   function favoriMi(filmId) {

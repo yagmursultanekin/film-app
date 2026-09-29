@@ -1,7 +1,7 @@
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useFilmler } from '../context/FilmContext';
 
-export default function DetayEkrani({ route }) {
+export default function DetayEkrani({ route, navigation }) {
   const { film } = route.params;
   const { favoriDegistir, favoriMi } = useFilmler();
 
@@ -12,6 +12,11 @@ export default function DetayEkrani({ route }) {
   return (
     <View style={styles.container}>
       <View style={styles.ustAlan}>
+        <TouchableOpacity style={styles.geriButon} onPress={() => navigation.goBack()}>
+          <Text style={styles.geriYazi}>← Geri</Text>
+
+        </TouchableOpacity>
+        
         {film.posterYolu ? (
           <Image
             source={{ uri: `https://image.tmdb.org/t/p/w300${film.posterYolu}` }}
@@ -89,4 +94,20 @@ const styles = StyleSheet.create({
   puanYazi: { fontWeight: 'bold', color: '#8a6d00', fontSize: 15 },
   aciklamaBaslik: { fontSize: 12, fontWeight: 'bold', color: '#999', marginBottom: 8, letterSpacing: 0.5 },
   aciklama: { fontSize: 15, lineHeight: 23, color: '#333' },
+  geriButon: {
+  alignSelf: 'flex-start',
+  marginBottom: 16,
+
+  backgroundColor: '#b01dd4',
+  borderRadius: 8,
+  width: 62,             // Butonun toplam genişliği
+  height: 25,             // Butonun toplam yüksekliği
+  justifyContent: 'center', // İçindeki yazıyı dikeyde ortalar
+  alignItems: 'center',
+},
+geriYazi: {
+  color: '#fff',
+  fontSize: 15,
+  fontWeight: 'bold',
+},
 });

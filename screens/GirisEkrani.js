@@ -1,20 +1,33 @@
 import { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { useAuth } from '../context/AuthContext';
 import OzelButon from '../components/OzelButon';
 
 export default function GirisEkrani({ navigation }) {
+  const { girisYap } = useAuth();
+
   const [eposta, setEposta] = useState('');
   const [sifre, setSifre] = useState('');
   const [hata, setHata] = useState('');
 
-  function girisYap() {
+  async function girisIslemi() {
     if (eposta.trim() === '' || sifre.trim() === '') {
       setHata('Lütfen e-posta ve şifreyi girin.');
       return;
     }
 
+    const sonuc = await girisYap(eposta.trim(), sifre);
+
+    if (!sonuc.basarili) {
+      setHata(sonuc.mesaj);
+      return;
+    }
+
     setHata('');
-    navigation.navigate('Liste');
+    navigation.reset({
+  index: 0,
+  routes: [{ name: 'Liste' }],
+});
   }
 
   return (
@@ -45,7 +58,7 @@ export default function GirisEkrani({ navigation }) {
 
         {hata !== '' && <Text style={styles.hata}>{hata}</Text>}
 
-        <OzelButon title="Giriş Yap" onPress={girisYap} />
+        <OzelButon title="Giriş Yap" onPress={girisIslemi} />
         <OzelButon
           title="Hesabın yok mu? Kayıt ol"
           onPress={() => navigation.navigate('Kayit')}
@@ -60,7 +73,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#702e7d' },
   ustAlan: { paddingTop: 70, paddingHorizontal: 20, paddingBottom: 30 },
   baslik: { fontSize: 28, fontWeight: 'bold', color: '#fff' },
-  altYazi: { color: '#c8e6c9', marginTop: 6, fontSize: 14 },
+  altYazi: { color: '#e1bee7', marginTop: 6, fontSize: 14 },
   icerik: {
     flex: 1,
     backgroundColor: '#fafafa',
