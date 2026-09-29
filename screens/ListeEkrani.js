@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity, Image, ActivityIndicator, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useFilmler } from '../context/FilmContext';
+import  OzelButon from '../components/OzelButon';
 
 const turler = ['Hepsi', 'Aksiyon', 'Macera', 'Animasyon', 'Komedi', 'Suç', 'Belgesel', 'Dram', 'Aile', 'Fantastik', 'Tarih', 'Korku', 'Müzik', 'Gizem', 'Romantik', 'Bilim Kurgu', 'Gerilim', 'Savaş'];
 const siralamaSecenekleri = [
@@ -67,6 +68,12 @@ const gosterilecekFilmler = useMemo(() => {
       </View>
 
       <View style={styles.icerik}>
+        <OzelButon
+  title="❤️ Favorilerim"
+  onPress={() => navigation.navigate('Favoriler')}
+  renk="#702e7d"
+/>
+
         <TextInput
           style={styles.aramaKutusu}
           placeholder="🔍  Film ara..."

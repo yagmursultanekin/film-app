@@ -1,7 +1,9 @@
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { useFilmler } from '../context/FilmContext';
 
 export default function DetayEkrani({ route }) {
   const { film } = route.params;
+  const { favoriDegistir, favoriMi } = useFilmler();
 
   const turMetni = film.turler && film.turler.length > 0
     ? film.turler.join(', ')
@@ -22,6 +24,15 @@ export default function DetayEkrani({ route }) {
         )}
         <Text style={styles.ad}>{film.ad}</Text>
         <Text style={styles.altBilgi}>{film.yil} · {turMetni}</Text>
+
+        <TouchableOpacity
+          style={styles.favoriButon}
+          onPress={() => favoriDegistir(film.id)}
+        >
+          <Text style={styles.favoriYazi}>
+            {favoriMi(film.id) ? '❤️ Favorilerden Çıkar' : '🤍 Favorilere Ekle'}
+          </Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.icerik}>
@@ -52,6 +63,14 @@ const styles = StyleSheet.create({
   posterYazi: { color: '#fff', fontSize: 40, fontWeight: 'bold' },
   ad: { fontSize: 22, fontWeight: 'bold', color: '#fff', textAlign: 'center' },
   altBilgi: { color: '#e1bee7', marginTop: 6, fontSize: 14, textAlign: 'center' },
+  favoriButon: {
+    marginTop: 16,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 20,
+  },
+  favoriYazi: { color: '#fff', fontWeight: 'bold', fontSize: 14 },
   icerik: {
     flex: 1,
     backgroundColor: '#fafafa',

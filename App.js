@@ -6,6 +6,7 @@ import GirisEkrani from './screens/GirisEkrani';
 import KayitEkrani from './screens/KayitEkrani';
 import ListeEkrani from './screens/ListeEkrani';
 import DetayEkrani from './screens/DetayEkrani';
+import FavorilerEkrani from './screens/FavorilerEkrani';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +19,7 @@ export default function App() {
           <Stack.Screen name="Kayit" component={KayitEkrani} />
           <Stack.Screen name="Liste" component={ListeEkrani} />
           <Stack.Screen name="Detay" component={DetayEkrani} />
+          <Stack.Screen name="Favoriler" component={FavorilerEkrani} />
         </Stack.Navigator>
       </NavigationContainer>
     </FilmProvider>
