@@ -97,8 +97,7 @@ const styles = StyleSheet.create({
   geriButon: {
   alignSelf: 'flex-start',
   marginBottom: 16,
-
-  backgroundColor: '#b01dd4',
+  backgroundColor: '#7cafbe',
   borderRadius: 8,
   width: 62,             // Butonun toplam genişliği
   height: 25,             // Butonun toplam yüksekliği

@@ -9,6 +9,9 @@ export default function FavorilerEkrani({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.ustAlan}>
+        <TouchableOpacity style={styles.geriButon} onPress={() => navigation.goBack()}>
+    <Text style={styles.geriYazi}>← Geri</Text>
+  </TouchableOpacity>
         <Text style={styles.baslik}>❤️ Favorilerim</Text>
         <Text style={styles.altYazi}>{favoriFilmler.length} film</Text>
       </View>
@@ -98,4 +101,20 @@ const styles = StyleSheet.create({
   altBilgi: { color: 'gray', marginTop: 4, fontSize: 13 },
   kalpButon: { padding: 8 },
   kalpYazi: { fontSize: 22 },
+
+    geriButon: {
+  alignSelf: 'flex-start',
+  marginBottom: 16,
+  backgroundColor: '#7cafbe',
+  borderRadius: 8,
+  width: 62,             // Butonun toplam genişliği
+  height: 25,             // Butonun toplam yüksekliği
+  justifyContent: 'center', // İçindeki yazıyı dikeyde ortalar
+  alignItems: 'center',
+},
+geriYazi: {
+  color: '#fff',
+  fontSize: 15,
+  fontWeight: 'bold',
+},
 });
