@@ -32,6 +32,9 @@ const ceviriler = {
     gecerliEposta: 'Geçerli bir e-posta girin.',
     sifreEnAz6: 'Şifre en az 6 karakter olmalı.',
     epostaSifreGirin: 'Lütfen e-posta ve şifreyi girin.',
+    sifreZayif: 'Zayıf',
+    sifreOrta: 'Orta',
+    sifreGuclu: 'Güçlü'
   },
   en: {
     filmArsivim: 'My Movie Archive',
@@ -66,6 +69,9 @@ const ceviriler = {
     gecerliEposta: 'Please enter a valid email.',
     sifreEnAz6: 'Password must be at least 6 characters.',
     epostaSifreGirin: 'Please enter your email and password.',
+    sifreZayif: 'Weak',
+    sifreOrta: 'Medium',
+    sifreGuclu: 'Strong'
   },
 };
 

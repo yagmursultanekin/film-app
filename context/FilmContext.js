@@ -1,7 +1,8 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import turHaritasi from '../data/turler';
+import turHaritalari from '../data/turler';
 import { useAuth } from './AuthContext';
+import { useLanguage } from './LanguageContext';
 
 const FilmContext = createContext();
 
@@ -9,6 +10,7 @@ const API_ANAHTARI = process.env.EXPO_PUBLIC_TMDB_API_KEY;
 
 export function FilmProvider({ children }) {
   const { aktifKullanici } = useAuth();
+  const { dil } = useLanguage();
 
   const [filmler, setFilmler] = useState([]);
   const [favoriler, setFavoriler] = useState([]);
@@ -17,8 +19,12 @@ export function FilmProvider({ children }) {
 
   useEffect(() => {
     async function filmleriGetir() {
+      setYukleniyor(true);
       try {
-        const url = `https://api.themoviedb.org/3/movie/popular?api_key=${API_ANAHTARI}&language=tr-TR&page=1`;
+        const tmdbDilKodu = dil === 'tr' ? 'tr-TR' : 'en-US';
+        const turHaritasi = turHaritalari[dil];
+
+        const url = `https://api.themoviedb.org/3/movie/popular?api_key=${API_ANAHTARI}&language=${tmdbDilKodu}&page=1`;
         const cevap = await fetch(url);
         const veri = await cevap.json();
 
@@ -27,8 +33,8 @@ export function FilmProvider({ children }) {
           ad: film.title,
           yil: film.release_date ? Number(film.release_date.slice(0, 4)) : 0,
           tur: film.genre_ids && film.genre_ids.length > 0
-            ? turHaritasi[film.genre_ids[0]] || 'Bilinmiyor'
-            : 'Bilinmiyor',
+            ? turHaritasi[film.genre_ids[0]] || (dil === 'tr' ? 'Bilinmiyor' : 'Unknown')
+            : (dil === 'tr' ? 'Bilinmiyor' : 'Unknown'),
           turler: film.genre_ids
             ? film.genre_ids.map((id) => turHaritasi[id]).filter(Boolean)
             : [],
@@ -38,6 +44,7 @@ export function FilmProvider({ children }) {
         }));
 
         setFilmler(donusturulmusListe);
+        setHata('');
       } catch (e) {
         setHata('Filmler yüklenirken bir hata oluştu.');
       } finally {
@@ -46,7 +53,7 @@ export function FilmProvider({ children }) {
     }
 
     filmleriGetir();
-  }, []);
+  }, [dil]);
 
   useEffect(() => {
     async function favorileriGetir() {

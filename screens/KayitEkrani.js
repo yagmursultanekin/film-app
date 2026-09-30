@@ -14,9 +14,9 @@ function sifreGucunuHesapla(sifre) {
   if (/[0-9]/.test(sifre)) puan++;
   if (/[^A-Za-z0-9]/.test(sifre)) puan++;
 
-  if (puan <= 1) return { seviye: 'zayif', renk: '#c62828', metin: 'Zayıf' };
-  if (puan <= 3) return { seviye: 'orta', renk: '#f9a825', metin: 'Orta' };
-  return { seviye: 'guclu', renk: '#2e7d32', metin: 'Güçlü' };
+  if (puan <= 1) return { seviye: 'zayif', renk: '#c62828' };
+  if (puan <= 3) return { seviye: 'orta', renk: '#f9a825' };
+  return { seviye: 'guclu', renk: '#2e7d32' };
 }
 
 export default function KayitEkrani({ navigation }) {
@@ -26,8 +26,9 @@ export default function KayitEkrani({ navigation }) {
   const [ad, setAd] = useState('');
   const [eposta, setEposta] = useState('');
   const [sifre, setSifre] = useState('');
-  const sifreGucu = sifre.length > 0 ? sifreGucunuHesapla(sifre) : null;
   const [hata, setHata] = useState('');
+
+  const sifreGucu = sifre.length > 0 ? sifreGucunuHesapla(sifre) : null;
 
   async function kayitYap() {
     if (ad.trim() === '' || eposta.trim() === '' || sifre.trim() === '') {
@@ -54,6 +55,17 @@ export default function KayitEkrani({ navigation }) {
 
     setHata('');
     navigation.navigate('Giris');
+  }
+
+  let sifreGucuMetni = '';
+  if (sifreGucu) {
+    if (sifreGucu.seviye === 'zayif') {
+      sifreGucuMetni = t.sifreZayif;
+    } else if (sifreGucu.seviye === 'orta') {
+      sifreGucuMetni = t.sifreOrta;
+    } else {
+      sifreGucuMetni = t.sifreGuclu;
+    }
   }
 
   return (
@@ -92,21 +104,28 @@ export default function KayitEkrani({ navigation }) {
         />
 
         {sifreGucu && (
-  <View style={styles.sifreGucuAlani}>
-    <View style={styles.sifreGucuCubuguArkaplan}>
-      <View
-        style={[
-          styles.sifreGucuCubugu,
-          {
-            width: sifreGucu.seviye === 'zayif' ? '33%' : sifreGucu.seviye === 'orta' ? '66%' : '100%',
-            backgroundColor: sifreGucu.renk,
-          },
-        ]}
-      />
-    </View>
-    <Text style={[styles.sifreGucuYazi, { color: sifreGucu.renk }]}>{sifreGucu.metin}</Text>
-  </View>
-)}
+          <View style={styles.sifreGucuAlani}>
+            <View style={styles.sifreGucuCubuguArkaplan}>
+              <View
+                style={[
+                  styles.sifreGucuCubugu,
+                  {
+                    width:
+                      sifreGucu.seviye === 'zayif'
+                        ? '33%'
+                        : sifreGucu.seviye === 'orta'
+                        ? '66%'
+                        : '100%',
+                    backgroundColor: sifreGucu.renk,
+                  },
+                ]}
+              />
+            </View>
+            <Text style={[styles.sifreGucuYazi, { color: sifreGucu.renk }]}>
+              {sifreGucuMetni}
+            </Text>
+          </View>
+        )}
 
         {hata !== '' && <Text style={styles.hata}>{hata}</Text>}
 
@@ -137,24 +156,24 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     fontSize: 15,
   },
-  hata: { color: '#c62828', marginBottom: 14, textAlign: 'center', fontSize: 13 },
   sifreGucuAlani: {
-  marginTop: -8,
-  marginBottom: 14,
-},
-sifreGucuCubuguArkaplan: {
-  height: 6,
-  backgroundColor: '#e0e0e0',
-  borderRadius: 3,
-  overflow: 'hidden',
-},
-sifreGucuCubugu: {
-  height: 6,
-  borderRadius: 3,
-},
-sifreGucuYazi: {
-  fontSize: 12,
-  fontWeight: 'bold',
-  marginTop: 4,
-},
+    marginTop: -8,
+    marginBottom: 14,
+  },
+  sifreGucuCubuguArkaplan: {
+    height: 6,
+    backgroundColor: '#e0e0e0',
+    borderRadius: 3,
+    overflow: 'hidden',
+  },
+  sifreGucuCubugu: {
+    height: 6,
+    borderRadius: 3,
+  },
+  sifreGucuYazi: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    marginTop: 4,
+  },
+  hata: { color: '#c62828', marginBottom: 14, textAlign: 'center', fontSize: 13 },
 });

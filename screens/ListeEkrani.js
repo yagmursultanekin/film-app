@@ -7,18 +7,20 @@ import { useLanguage } from '../context/LanguageContext';
 import OzelButon from '../components/OzelButon';
 import DilSecici from '../components/DilSecici';
 
-const turListesi = ['Aksiyon', 'Macera', 'Animasyon', 'Komedi', 'Suç', 'Belgesel', 'Dram', 'Aile', 'Fantastik', 'Tarih', 'Korku', 'Müzik', 'Gizem', 'Romantik', 'Bilim Kurgu', 'Gerilim', 'Savaş'];
+const turListesiTr = ['Aksiyon', 'Macera', 'Animasyon', 'Komedi', 'Suç', 'Belgesel', 'Dram', 'Aile', 'Fantastik', 'Tarih', 'Korku', 'Müzik', 'Gizem', 'Romantik', 'Bilim Kurgu', 'Gerilim', 'Savaş'];
+const turListesiEn = ['Action', 'Adventure', 'Animation', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Family', 'Fantasy', 'History', 'Horror', 'Music', 'Mystery', 'Romance', 'Science Fiction', 'Thriller', 'War'];
 
 export default function ListeEkrani({ navigation }) {
   const { filmler, yukleniyor, hata, favoriDegistir, favoriMi } = useFilmler();
   const { cikisYap } = useAuth();
-  const { t } = useLanguage();
+  const { t, dil } = useLanguage();
 
   const [arama, setArama] = useState('');
   const [seciliTur, setSeciliTur] = useState('Hepsi');
   const [siralama, setSiralama] = useState('ad');
 
-  const turler = ['Hepsi', ...turListesi];
+  const turListesi = dil === 'tr' ? turListesiTr : turListesiEn;
+const turler = ['Hepsi', ...turListesi];
   const siralamaSecenekleri = [
     { label: t.ismeGore, value: 'ad' },
     { label: t.puanaGore, value: 'puan' },
