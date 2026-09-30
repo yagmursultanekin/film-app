@@ -58,7 +58,21 @@ export default function DetayEkrani({ route, navigation }) {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#702e7d' },
   ustAlan: { paddingTop: 50, paddingHorizontal: 24, paddingBottom: 30, alignItems: 'center' },
-  geriButon: { alignSelf: 'flex-start', marginBottom: 16 },
+  geriButon: { 
+    alignSelf: 'flex-start', 
+    backgroundColor: '#00000000',
+    marginBottom: 16,
+    borderRadius: 8,
+    width: 75,             // Butonun toplam genişliği
+    height: 35,             // Butonun toplam yüksekliği
+    justifyContent: 'center', // İçindeki yazıyı dikeyde ortalar
+    alignItems: 'center',     // İçindeki yazıyı yatayda ortalar
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 4,
+  },
+
   geriYazi: { color: '#fff', fontSize: 15, fontWeight: 'bold' },
   poster: { width: 120, height: 180, borderRadius: 12, marginBottom: 14 },
   posterYerTutucu: {
